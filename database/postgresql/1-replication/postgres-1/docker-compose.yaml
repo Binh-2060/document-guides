@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  master-db:
+    container_name: master-db
+    command: "postgres -c config_file=/config/postgresql.conf"
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgresadmin
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DB=postgresdb
+      - PGDATA=/data
+    volumes:
+      - ./pgdata:/data
+      - ./config:/config
+      - ./archive:/mnt/server/archive
+      - ./init:/docker-entrypoint-initdb.d/:ro
+    ports:
+      - 5001:5432
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    external: true
